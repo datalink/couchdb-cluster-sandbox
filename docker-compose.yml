@@ -37,6 +37,7 @@ services:
     volumes:
       - ./nodes/1/data:/opt/couchdb/data
       - ./nodes/1/etc:/opt/couchdb/etc/local.d
+      - ./nodes/1/log:/opt/couchdb/log
     environment:
       - NODENAME=node1.cluster                    # This must be the _FQDN_ of the node within the cluster network
       - ERL_FLAGS=-setcookie "relax"
@@ -51,6 +52,7 @@ services:
     volumes:
       - ./nodes/2/data:/opt/couchdb/data
       - ./nodes/2/etc:/opt/couchdb/etc/local.d
+      - ./nodes/2/log:/opt/couchdb/log
     environment:
       - NODENAME=node2.cluster                    # This must be the _FQDN_ of the node within the cluster network
       - ERL_FLAGS=-setcookie "relax"
@@ -65,6 +67,7 @@ services:
     volumes:
       - ./nodes/3/data:/opt/couchdb/data
       - ./nodes/3/etc:/opt/couchdb/etc/local.d
+      - ./nodes/3/log:/opt/couchdb/log
     environment:
       - NODENAME=node3.cluster                    # This must be the _FQDN_ of the node within the cluster network
       - ERL_FLAGS=-setcookie "relax"

@@ -28,16 +28,19 @@ once this happens.
 ├── cluster-init            Build files for init container
 ├── cluster-lb              Build files for load balancer container
 ├── cluster-node            Build files for node containers
-└── nodes                   Data and config mounts for each node
+└── nodes                   Data,config and log mounts for each node
     ├── 1
     │   ├── data
-    │   └── etc
+    │   ├── etc
+    │   └── log
     ├── 2
     │   ├── data
-    │   └── etc
+    │   ├── etc
+    │   └── log
     └── 3
         ├── data
-        └── etc
+        ├── etc
+        └── log
 ```
 
 ## Commands
@@ -53,6 +56,12 @@ has worked:
 
 ```console
 docker logs -f cluster-init
+```
+
+Check the CouchDB logs of all nodes:
+
+```console
+tail -qf nodes/*/log/couch.log
 ```
 
 Stop and tear down the stack:
