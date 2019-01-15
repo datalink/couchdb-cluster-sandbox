@@ -1,8 +1,10 @@
 #!/usr/bin/env sh
 
-# Cluster Init Service
+#
+# CouchDB Cluster Init Service
 #
 # Waits for CouchDB nodes to come online, then configures the nodes in a cluster.
+#
 
 echo "Initialising a 3-node CouchDB cluster"
 
@@ -52,8 +54,8 @@ curl -s --user admin:secret -X PUT http://node3.cluster:5984/_node/_local/_confi
 
 # Configure nodes 2 and 3 on node 1
 echo "Configure nodes 2 and 3 on node 1"
-curl -s --user admin:secret -X POST http://node1.cluster:5984/_cluster_setup -H "Content-Type: application/json" -d '{"remote_node":"node2.cluster","port":"5984","action":"enable_cluster","username":"admin","password":"secret","bind_address":"0.0.0.0","node_count":3}'
-curl -s --user admin:secret -X POST http://node1.cluster:5984/_cluster_setup -H "Content-Type: application/json" -d '{"remote_node":"node3.cluster","port":"5984","action":"enable_cluster","username":"admin","password":"secret","bind_address":"0.0.0.0","node_count":3}'
+curl -s --user admin:secret -X POST http://node1.cluster:5984/_cluster_setup -H "Content-Type: application/json" -d '{"action":"enable_cluster","remote_node":"node2.cluster","port":"5984","username":"admin","password":"secret","bind_address":"0.0.0.0","node_count":3}'
+curl -s --user admin:secret -X POST http://node1.cluster:5984/_cluster_setup -H "Content-Type: application/json" -d '{"action":"enable_cluster","remote_node":"node3.cluster","port":"5984","username":"admin","password":"secret","bind_address":"0.0.0.0","node_count":3}'
 
 # Add nodes 2 and 3 on node 1
 echo "Add nodes 2 and 3 on node 1"
@@ -68,8 +70,8 @@ curl -s --user admin:secret -X POST http://node1.cluster:5984/_cluster_setup -H 
 echo "Check cluster membership"
 curl -s --user admin:secret -X GET http://node1.cluster:5984/_membership | jq
 
-# Create default system tables (this seems to be implicit in the cluster setup process)
-#echo "Create default system tables"
+# Create default system databases (this seems to be implicit in the cluster setup process)
+#echo "Create default system databases"
 #curl -s --user admin:secret -X PUT http://node1.cluster:5984/_users
 #curl -s --user admin:secret -X PUT http://node1.cluster:5984/_replicator
 #curl -s --user admin:secret -X PUT http://node1.cluster:5984/_global_changes

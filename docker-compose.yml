@@ -1,4 +1,8 @@
+#
 # CouchDB Docker Sandbox
+#
+# See README.md for details.
+#
 version: '3.5'
 networks:
   cluster:
@@ -34,15 +38,12 @@ services:
       - ./nodes/1/data:/opt/couchdb/data
       - ./nodes/1/etc:/opt/couchdb/etc/local.d
     environment:
-      - NODENAME=node1.cluster
+      - NODENAME=node1.cluster                    # This must be the _FQDN_ of the node within the cluster network
       - ERL_FLAGS=-setcookie "relax"
-      # Admin user is now seeded in local.ini in the cluster-node image (the credentials are the same)
-      #- COUCHDB_USER=admin
-      #- COUCHDB_PASSWORD=secret
     networks:
       - cluster
     #ports:
-    #  - 59841:5984 # Uncomment to enable direct access to node
+    #  - 59841:5984                               # Uncomment to enable direct access to the node
   node2:
     build: ./cluster-node
     image: cluster-node:latest
@@ -51,15 +52,12 @@ services:
       - ./nodes/2/data:/opt/couchdb/data
       - ./nodes/2/etc:/opt/couchdb/etc/local.d
     environment:
-      - NODENAME=node2.cluster
+      - NODENAME=node2.cluster                    # This must be the _FQDN_ of the node within the cluster network
       - ERL_FLAGS=-setcookie "relax"
-      # Admin user is now seeded in local.ini in the cluster-node image (the credentials are the same)
-      #- COUCHDB_USER=admin
-      #- COUCHDB_PASSWORD=secret
     networks:
       - cluster
     #ports:
-    #  - 59842:5984 # Uncomment to enable direct access to node
+    #  - 59842:5984                               # Uncomment to enable direct access to node
   node3:
     build: ./cluster-node
     image: cluster-node:latest
@@ -68,12 +66,9 @@ services:
       - ./nodes/3/data:/opt/couchdb/data
       - ./nodes/3/etc:/opt/couchdb/etc/local.d
     environment:
-      - NODENAME=node3.cluster
+      - NODENAME=node3.cluster                    # This must be the _FQDN_ of the node within the cluster network
       - ERL_FLAGS=-setcookie "relax"
-      # Admin user is now seeded in local.ini in the cluster-node image (the credentials are the same)
-      #- COUCHDB_USER=admin
-      #- COUCHDB_PASSWORD=secret
     networks:
       - cluster
     #ports:
-    #  - 59843:5984 # Uncomment to enable direct access to node
+    #  - 59843:5984                               # Uncomment to enable direct access to node
