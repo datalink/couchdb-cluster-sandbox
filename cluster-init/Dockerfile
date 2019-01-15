@@ -4,6 +4,6 @@ RUN apk --no-cache add \
     curl \
     jq
 
-COPY docker-entrypoint.sh /docker-entrypoint.sh
+COPY cluster-init.sh /cluster-init.sh
 
-CMD [ "/docker-entrypoint.sh" ]
+CMD [ "/cluster-init.sh" ]

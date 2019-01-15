@@ -17,8 +17,8 @@ The load balancer service is based on an official HAProxy image, with a custom
 configuration file containing a 'backend' that includes the 3 nodes.
 
 The 'init' container is a small Alpine image embellished with with 'curl' and
-'jq' packages. These utilities are used by the container init script to wait
-for each CouchDB node to come online, configure each in a cluster
+'jq' packages. These utilities are used by the cluster init script to wait
+for each CouchDB node to come online, then configure each in a cluster
 once this happens.
 
 ## Directory structure
@@ -28,7 +28,7 @@ once this happens.
 ├── cluster-init            Build files for init container
 ├── cluster-lb              Build files for load balancer container
 ├── cluster-node            Build files for node containers
-└── nodes                   Data,config and log mounts for each node
+└── nodes                   Data, config and log mounts for each node
     ├── 1
     │   ├── data
     │   ├── etc
