@@ -29,9 +29,10 @@ waitForNode node3
 
 # Check cluster status and exit if already set up
 echo "Check cluster status and exit if already set up"
-CLUSTER_NODES=$(curl -s --user admin:secret -X GET http://node1.cluster:5984/_membership | jq '.cluster_nodes | length')
-if [ "${CLUSTER_NODES}" -eq 3 ] ; then
-  echo "CouchDB cluster already set up with ${CLUSTER_NODES} nodes"
+ALL_NODES_COUNT=$(curl -s --user admin:secret -X GET http://node1.cluster:5984/_membership | jq '.all_nodes | length')
+if [ "${ALL_NODES_COUNT}" -eq 3 ] ; then
+  echo "CouchDB cluster already set up with ${ALL_NODES_COUNT} nodes"
+  curl -s --user admin:secret -X GET http://node1.cluster:5984/_membership | jq '.all_nodes'
   exit
 fi
 
