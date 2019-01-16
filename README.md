@@ -1,13 +1,26 @@
 # CouchDB Cluster Sandbox
 
+## Introduction
+
+This project was set up to assist with learning and documenting the process
+of setting up a CouchDB cluster.
+
+As it is intended primarily for learning and experimenting, the number of nodes
+and other settings have been hard-coded. It should be straightforward to update
+the project with a dynamic configuration.
+
+Feel free to submit issues and PRs with any corrections or ideas for
+improvement.
+
 ## Outline
 
-This cluster sandbox is orchestrated using Docker Compose, which builds and
-configures a stack consisting of 5 containers:
+The cluster is orchestrated using Docker Compose, which builds and configures
+a stack consisting of 5 containers on a network (`cluster`):
 
-* 3 x CouchDB nodes
-* 1 x HAProxy load balancer
-* 1 x Init container, which configures the nodes as a cluster
+* 3 × CouchDB nodes (`node1.cluster`, `node2.cluster` and `node3.cluster`)
+* 1 × HAProxy load balancer (`cluster-lb.cluster`)
+* 1 × 'Init' container (`cluster-init.cluster`), which configures and enroles
+  the nodes in the cluster
 
 The CouchDB nodes are based on an official Docker image, modified with a custom
 configuration file to ensure the same salted administrator credentials are
@@ -133,6 +146,11 @@ Waiting for node2
 Waiting for node3
 Check cluster status and exit if already set up
 CouchDB cluster already set up with 3 nodes
+[
+  "couchdb@node1.cluster",
+  "couchdb@node2.cluster",
+  "couchdb@node3.cluster"
+]
 ```
 
 ### Endpoints
