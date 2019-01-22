@@ -58,10 +58,10 @@ once this happens.
 
 ## Commands
 
-Build and start the stack:
+Build and start the stack in the foreground (use the `-d` option to background):
 
 ```console
-docker-compose up -d
+docker-compose up [-d]
 ```
 
 Check the logs of the init script to confirm that the cluster initialisation
@@ -192,3 +192,14 @@ $ curl -s -X GET http://localhost:59843 | jq -r .uuid
 $ curl -s -X GET http://localhost:59843 | jq -r .uuid
 2d964d11d414ecd61d4eceb3fc00024b
 ```
+
+## Setup notes
+
+Items of note encountered during the setup process:
+
+* Even if a node is reachable by simple hostname on the network, node names
+  must use an *IP address* or *fully-qualified domain name* for the hostname
+  portion, e.g. `couchdb@node1.cluster` in the case of this Docker network.
+  See the [relevant documentation][1] for details.
+
+[1]: https://docs.couchdb.org/en/master/setup/cluster.html#make-couchdb-use-correct-ip-fqdn-and-the-open-ports
