@@ -19,7 +19,7 @@ a stack consisting of 5 containers on a network (`cluster`):
 
 * 3 × CouchDB nodes (`node1.cluster`, `node2.cluster` and `node3.cluster`)
 * 1 × HAProxy load balancer (`cluster-lb.cluster`)
-* 1 × 'Init' container (`cluster-init.cluster`), which configures and enroles
+* 1 × 'Init' container (`cluster-init.cluster`), which configures and enrols
   the nodes in the cluster
 
 The CouchDB nodes are based on an official Docker image, modified with a custom
