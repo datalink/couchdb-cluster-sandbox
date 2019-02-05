@@ -2,41 +2,43 @@
 
 ## Introduction
 
-This project was set up to assist with learning and documenting the process
-of setting up a CouchDB cluster.
+This project was set up to assist with learning and documenting the
+process of setting up a CouchDB cluster.
 
-As it is intended primarily for learning and experimenting, the number of nodes
-and other settings have been hard-coded. It should be straightforward to update
-the project with a dynamic configuration.
+As it is intended primarily for learning and experimenting, the number
+of nodes and other settings have been hard-coded. It should be
+straightforward to update the project with a dynamic configuration.
 
 Feel free to submit issues and PRs with any corrections or ideas for
 improvement.
 
 ## Outline
 
-The cluster is orchestrated using Docker Compose, which builds and configures
-a stack consisting of 5 containers on a network (`cluster`):
+The cluster is orchestrated using Docker Compose, which builds and
+configures a stack consisting of 5 containers on a network (`cluster`):
 
-* 3 × CouchDB nodes (`node1.cluster`, `node2.cluster` and `node3.cluster`)
-* 1 × HAProxy load balancer (`cluster-lb.cluster`)
-* 1 × 'Init' container (`cluster-init.cluster`), which configures and enrols
-  the nodes in the cluster
+  - 3 × CouchDB nodes (`node1.cluster`, `node2.cluster` and
+    `node3.cluster`)
+  - 1 × HAProxy load balancer (`cluster-lb.cluster`)
+  - 1 × ‘Init’ container (`cluster-init.cluster`), which configures and
+    enrols the nodes in the cluster
 
-The CouchDB nodes are based on an official Docker image, modified with a custom
-configuration file to ensure the same salted administrator credentials are
-deployed to each node.
+The CouchDB nodes are based on an official Docker image, modified with a
+custom configuration file to ensure the same salted administrator
+credentials are deployed to each node.
 
-The load balancer service is based on an official HAProxy image, with a custom
-configuration file containing a 'backend' that includes the 3 nodes.
+The load balancer service is based on an official HAProxy image, with a
+custom configuration file containing a ‘backend’ that includes the 3
+nodes.
 
-The 'init' container is a small Alpine image embellished with with 'curl' and
-'jq' packages. These utilities are used by the cluster init script to wait
-for each CouchDB node to come online, then configure each in a cluster
-once this happens.
+The ‘init’ container is a small Alpine image embellished with with
+‘curl’ and ‘jq’ packages. These utilities are used by the cluster
+init script to wait for each CouchDB node to come online, then configure
+each in a cluster once this happens.
 
 ## Directory structure
 
-```text
+``` text
 .
 ├── cluster-init            Build files for init container
 ├── cluster-lb              Build files for load balancer container
@@ -58,34 +60,35 @@ once this happens.
 
 ## Commands
 
-Build and start the stack in the foreground (use the `-d` option to background):
+Build and start the stack in the foreground (use the `-d` option to
+background):
 
-```console
+``` console
 docker-compose up [-d]
 ```
 
-Check the logs of the init script to confirm that the cluster initialisation
-has worked:
+Check the logs of the init script to confirm that the cluster
+initialisation has worked:
 
-```console
+``` console
 docker logs -f cluster-init
 ```
 
 Check the CouchDB logs of all nodes:
 
-```console
+``` console
 tail -qf nodes/*/log/couch.log
 ```
 
 Stop and tear down the stack:
 
-```console
+``` console
 docker-compose down
 ```
 
 Nuke the data directories:
 
-```console
+``` console
 rm -rf nodes/1/ nodes/2/ nodes/3/
 ```
 
@@ -95,7 +98,7 @@ rm -rf nodes/1/ nodes/2/ nodes/3/
 
 Sample output for a new cluster:
 
-```console
+``` console
 Initialising a 3-node CouchDB cluster
 Check all nodes active
 Waiting for node1
@@ -138,7 +141,7 @@ Use http://localhost:5984/_utils for CouchDB admin.
 
 Sample output if the cluster has already been configured:
 
-```console
+``` console
 Initialising a 3-node CouchDB cluster
 Check all nodes active
 Waiting for node1
@@ -159,32 +162,36 @@ The default administrator credentials are `admin` and `secret`.
 
 On the Docker host:
 
-* The load-balanced CouchDB endpoint is exposed as http://localhost:5984.
-* Fauxton can be accessed at http://localhost:5984/_utils.
-* HAProxy statistics can be accessed at http://localhost:5984/_haproxy_stats.
+  - The load-balanced CouchDB endpoint is exposed as
+    http://localhost:5984.
+  - Fauxton can be accessed at http://localhost:5984/\_utils.
+  - HAProxy statistics can be accessed at
+    http://localhost:5984/\_haproxy\_stats.
 
-If the ports are enabled, the nodes can be directly accessed respectively at:
+If the ports are enabled, the nodes can be directly accessed
+respectively at:
 
-* http://localhost:59841
-* http://localhost:59842
-* http://localhost:59843
+  - http://localhost:59841
+  - http://localhost:59842
+  - http://localhost:59843
 
-The relevant config lines in `docker-compose.yml` must be uncommented to enable
-these ports.
+The relevant config lines in `docker-compose.yml` must be uncommented to
+enable these ports.
 
 ### Configuration consistency
 
-Each node should have common server UUIDs and shared secrets. Compare the
-`docker.ini` files in each node's config mount directory to confirm this:
+Each node should have common server UUIDs and shared secrets. Compare
+the `docker.ini` files in each node’s config mount directory to confirm
+this:
 
-* `./nodes/1/etc/docker.ini`
-* `./nodes/2/etc/docker.ini`
-* `./nodes/3/etc/docker.ini`
+  - `./nodes/1/etc/docker.ini`
+  - `./nodes/2/etc/docker.ini`
+  - `./nodes/3/etc/docker.ini`
 
-When configured correctly, the UUID reported by each node's root URL should
-also match. For example:
+When configured correctly, the UUID reported by each node’s root URL
+should also match. For example:
 
-```console
+``` console
 $ curl -s -X GET http://localhost:59841 | jq -r .uuid
 2d964d11d414ecd61d4eceb3fc00024b
 $ curl -s -X GET http://localhost:59843 | jq -r .uuid
@@ -197,9 +204,10 @@ $ curl -s -X GET http://localhost:59843 | jq -r .uuid
 
 Items of note encountered during the setup process:
 
-* Even if a node is reachable by simple hostname on the network, node names
-  must use an *IP address* or *fully-qualified domain name* for the hostname
-  portion, e.g. `couchdb@node1.cluster` in the case of this Docker network.
-  See the [relevant documentation][1] for details.
+  - Even if a node is reachable by simple hostname on the network, node
+    names must use an *IP address* or *fully-qualified domain name* for
+    the hostname portion, e.g. `couchdb@node1.cluster` in the case of
+    this Docker network. See the [relevant documentation][1] for
+    details.
 
 [1]: https://docs.couchdb.org/en/master/setup/cluster.html#make-couchdb-use-correct-ip-fqdn-and-the-open-ports
