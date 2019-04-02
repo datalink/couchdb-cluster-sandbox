@@ -164,9 +164,9 @@ On the Docker host:
 
   - The load-balanced CouchDB endpoint is exposed as
     http://localhost:5984.
-  - Fauxton can be accessed at http://localhost:5984/\_utils.
+  - Fauxton can be accessed at http://localhost:5984/_utils.
   - HAProxy statistics can be accessed at
-    http://localhost:5984/\_haproxy\_stats.
+    http://localhost:5984/_haproxy_stats.
 
 If the ports are enabled, the nodes can be directly accessed
 respectively at:
